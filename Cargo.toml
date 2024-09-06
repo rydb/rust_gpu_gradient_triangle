@@ -1,0 +1,19 @@
+[package]
+name = "triangle_shader"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wgpu = "22"
+naga = {version = "22", features = ["wgsl-out"]}
+env_logger = "0.10"
+bytemuck = { version = "1.12", features = [ "derive" ] }
+
+winit = { version = "0.29", features = ["rwh_05"] }
+pollster = "0.3"
+
+spirv-std = {path = "../rust-gpu/crates/spirv-std"}
+spirv-builder = {path = "../rust-gpu/crates/spirv-builder"}
+include_dir = "0.7"
+
+gradient_triangle = {path = "assets/shaders/gradient_triangle"}

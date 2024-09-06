@@ -1,0 +1,11 @@
+[package]
+name = "gradient_triangle"
+version = "0.0.0"
+edition = "2021"
+
+[lib]
+crate-type = ["dylib", "lib"]
+
+[dependencies]
+#spirv-std = { git = "https://github.com/LemonHX/rust-gpu", branch = "update_1.78.0"}
+spirv-std = {path = "../../../../rust-gpu/crates/spirv-std"}
