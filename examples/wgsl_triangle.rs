@@ -1,10 +1,6 @@
-use std::{
-    error,
-    fs::{self, File},
-    io::Read,
-    path::PathBuf,
-};
-use parse_wgsl_shader;
+use std::fs;
+
+use rust_gpu_gradient_triangle::{gradient_triangle_pipeline::run_shader, parse_wgsl_shader};
 
 fn main() {
     let shader_file_name = "minimal_triangle.wgsl";

@@ -29,6 +29,26 @@ struct Vertex {
     position: [f32; 3],
     color: [f32; 3],
 }
+impl Vertex {
+    fn desc() -> wgpu::VertexBufferLayout<'static> {
+        wgpu::VertexBufferLayout {
+            array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
+            step_mode: wgpu::VertexStepMode::Vertex,
+            attributes: &[
+                wgpu::VertexAttribute {
+                    offset: 0,
+                    shader_location: 0,
+                    format: wgpu::VertexFormat::Float32x3,
+                },
+                wgpu::VertexAttribute {
+                    offset: std::mem::size_of::<[f32; 3]>() as wgpu::BufferAddress,
+                    shader_location: 1,
+                    format: wgpu::VertexFormat::Float32x3,
+                }
+            ]
+        }
+    }
+}
 
 // pub struct Color(Buffer<Vec4<F32>>);
 //pub struct Color(Buffer<0, Vec<F64>>);
@@ -124,12 +144,12 @@ const VERTICES: &[Vertex] = &[
 
 const INDICES: &[u16] = &[0, 1, 2, /* padding */ 0];
 
-struct State<'a> {
+pub struct State<'a> {
     surface: wgpu::Surface<'a>,
     device: wgpu::Device,
     queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
-    size: winit::dpi::PhysicalSize<u32>,
+    pub size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
     // NEW!
     vertex_buffer: wgpu::Buffer,
@@ -139,7 +159,7 @@ struct State<'a> {
 }
 
 impl<'a> State<'a> {
-    async fn new(window: &'a Window, shader_as_str: &str) -> State<'a> {
+    pub async fn new(window: &'a Window, shader_as_str: &str) -> State<'a> {
         let size = window.inner_size();
 
         // The instance is a handle to our GPU
@@ -226,7 +246,10 @@ impl<'a> State<'a> {
             vertex: wgpu::VertexState {
                 module: &shader,
                 entry_point: "vs_main",
-                buffers: &[BUFFERLAYOUT],
+                buffers: &[
+                    Vertex::desc()
+                    //BUFFERLAYOUT
+                ],
                 compilation_options: PipelineCompilationOptions::default()
             },
             fragment: Some(
@@ -309,13 +332,13 @@ impl<'a> State<'a> {
     }
 
     #[allow(unused_variables)]
-    fn input(&mut self, event: &WindowEvent) -> bool {
+    pub fn input(&mut self, event: &WindowEvent) -> bool {
         false
     }
 
-    fn update(&mut self) {}
+    pub fn update(&mut self) {}
 
-    fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
+    pub fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
         let output = self.surface.get_current_texture()?;
         let view = output
             .texture
